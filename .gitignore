@@ -27,6 +27,7 @@
 *.lib
 
 # Executables
+regcm_dynamical_core
 *.exe
 *.out
 *.app
