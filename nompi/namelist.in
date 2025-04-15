@@ -1,0 +1,11 @@
+&dimensions
+  jx = 100,
+  iy = 100,
+  kz = 30,
+/
+
+&timeparams
+  nstep = 2000,
+  iout = 200,
+  iprint = 20,
+/

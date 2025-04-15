@@ -27,12 +27,12 @@ module mod_dynparam
 
   private
 
-  integer(ik4) , public , parameter :: nstep = 2000
-  integer(ik4) , public , parameter :: iprint = 20
-  integer(ik4) , public , parameter :: iout = 100
-  integer(ik4) , public , parameter :: iy = 100
-  integer(ik4) , public , parameter :: jx = 100
-  integer(ik4) , public , parameter :: kz = 30
+  integer(ik4) , public :: nstep = 2000
+  integer(ik4) , public :: iprint = 20
+  integer(ik4) , public :: iout = 100
+  integer(ik4) , public :: iy = 100
+  integer(ik4) , public :: jx = 100
+  integer(ik4) , public :: kz = 30
 
   real(rkx) , public :: mo_ztop , mo_a0 , mo_h
 
