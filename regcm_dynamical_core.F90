@@ -16,16 +16,21 @@ program regcm_dynamical_core
 
   logical :: lprint
   integer(ik4) :: i
+  integer(ik4) :: ipunit
   integer(ik4) :: ierr
   integer(ik4) :: iprov
   integer(ik4) , dimension(8) :: tval
   real(rkx) :: start_time , finish_time , last_time
   character (len=32) :: cdata='?'
   character (len=5) :: czone='?'
+  character (len=256) :: namelistfile
   type(grid_nc_var2d) :: psout
   type(grid_nc_var3d) :: tout
   character(len=*) , parameter :: f99001 = &
         '(2x," GIT Revision: ",a," compiled at: data : ",a,"  time: ",a,/)'
+
+  call get_command_argument(1,value=namelistfile)
+  call readinput(namelistfile)
 
   call mpi_init_thread(mpi_thread_single,iprov,ierr)
   if ( ierr /= mpi_success ) then
@@ -75,6 +80,39 @@ program regcm_dynamical_core
   call mpi_finalize(ierr)
 
   contains
+
+    subroutine readinput(namelistfile)
+      implicit none
+      character(len=*) , intent(in) :: namelistfile
+      namelist /dimensions/ jx , iy , kz
+      namelist /timeparams/ nstep , iprint , iout
+
+      open(newunit=ipunit, file=namelistfile, status='old', &
+           action='read', iostat=ierr)
+      if ( ierr /= 0 ) then
+        write(output_unit, *) 'Namelist file error, using defaults.'
+      else
+        rewind(ipunit)
+        read (ipunit, nml=dimensions, iostat=ierr, err=100)
+        if ( ierr /= 0 ) then
+           write(error_unit, *) 'Error reading namelist dimensions'
+           stop
+        end if
+        rewind(ipunit)
+        read (ipunit, nml=timeparams, iostat=ierr, err=200)
+        if ( ierr /= 0 ) then
+          write(error_unit, *) 'Error reading namelist timeparams'
+          stop
+        end if
+      end if
+
+      return
+
+ 100  write(error_unit, *) 'Error reading namelist dimensions'
+      stop
+ 200  write(error_unit, *) 'Error reading namelist timeparams'
+      stop
+    end subroutine readinput
 
     subroutine param
       implicit none
